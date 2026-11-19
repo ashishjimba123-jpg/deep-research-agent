@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deep Research (local)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Deep Research <span class="tag">local, no API keys</span></h1>
+    <p class="sub">Ask a question. The agent plans, searches the web, reads pages and writes a cited report.</p>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="ask-h">
+      <h2 id="ask-h" class="sr">Research request</h2>
+      <label for="query">Research question</label>
+      <textarea id="query" rows="3" maxlength="500" placeholder="e.g. What is retrieval-augmented generation and what are its limits?"></textarea>
+      <div class="chips" id="examples"></div>
+
+      <div class="row">
+        <div>
+          <label for="mode">Engine</label>
+          <select id="mode"></select>
+        </div>
+        <div>
+          <label for="model">Model name <span class="hint">(optional)</span></label>
+          <input id="model" list="model-list" placeholder="default">
+          <datalist id="model-list"></datalist>
+        </div>
+        <div>
+          <label for="depth">Depth</label>
+          <select id="depth">
+            <option value="quick">Quick (3 questions)</option>
+            <option value="standard" selected>Standard (5 questions)</option>
+            <option value="deep">Deep (7 questions)</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="check"><input type="checkbox" id="clarify"> Ask clarifying questions first <span class="hint">(needs a local model)</span></label>
+
+      <details class="adv">
+        <summary>Backend address</summary>
+        <input id="backend" placeholder="http://localhost:8080" aria-label="Backend address">
+        <p class="hint">Leave empty when this page is served by the backend.</p>
+      </details>
+
+      <div class="actions">
+        <button id="start" class="primary">Start research</button>
+        <button id="stop" disabled>Stop</button>
+        <span id="status" role="status" aria-live="polite"></span>
+      </div>
+      <div id="error" class="error" hidden></div>
+    </section>
+
+    <section id="clarify-panel" class="card" hidden>
+      <h2>A few quick questions</h2>
+      <div id="clarify-questions"></div>
+      <div class="actions">
+        <button id="clarify-go" class="primary">Continue</button>
+        <button id="clarify-skip">Skip</button>
+      </div>
+    </section>
+
+    <section id="progress" class="card" hidden>
+      <h2>Progress</h2>
+      <ol class="stages" id="stages">
+        <li data-stage="clarification">Clarification</li>
+        <li data-stage="brief">Research brief</li>
+        <li data-stage="research">Research</li>
+        <li data-stage="report">Final report</li>
+      </ol>
+      <div id="plan" hidden></div>
+      <ul id="log" class="log"></ul>
+    </section>
+
+    <section id="findings-card" class="card" hidden>
+      <h2>Findings</h2>
+      <div id="findings"></div>
+    </section>
+
+    <section id="report-card" class="card" hidden>
+      <div class="report-head">
+        <h2>Report</h2>
+        <div>
+          <button id="copy">Copy Markdown</button>
+          <button id="download">Download .md</button>
+        </div>
+      </div>
+      <article id="report" class="report"></article>
+      <h3>Sources</h3>
+      <ol id="sources" class="sources"></ol>
+    </section>
+  </main>
+
+  <footer>Reports are generated from web pages and may contain mistakes. Open the cited sources to verify important claims.</footer>
+  <script src="app.js"></script>
+</body>
+</html>
